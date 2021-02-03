@@ -1,14 +1,60 @@
+<!DOCTYPE html>
+
 <script src="https://d3js.org/d3.v6.min.js"></script>
+
+<svg id="workspace"></svg>
 
 <script>
   console.log(d3); // test if d3 is loaded
-  // Add an SVG
+  console.log("hello")
+
+  document.getElementById("workspace").style.backgroundColor="#2a2a35";
+
+  var svg = d3.select('#workspace')
+    .attr('width',500)
+    .attr('height',500)
+
+  // Add an SVG todo
   // Add Rectangles
+  svg.append('rect')
+          .attr('x', 340)  // top left corner
+          .attr('y', 150)  // x,y coords from origin top left
+          .attr('width', 30)
+          .attr('height', 10)
+          .attr('fill', '#fff4ea');
+
   // Add Circles
+  svg.append('circle')
+    .attr('cx', 100)    // center of circle
+    .attr('cy', 150)
+    .attr('r', 30)
+    .attr('fill', '#fff4ea');
+
   // Add Lines
+  svg.append('line')
+    .attr('x1', 100)    // endpoints
+    .attr('y1', 150)
+    .attr('x2', 340)
+    .attr('y2', 150)
+    .attr('stroke', 'red');
+
   // Add Polygons
+  var poly = "10,10 10,200 20,30 15,15"
+  svg.append('polygon')
+    .attr('points', poly)
+    .style('fill', 'lime')
+
+  var star = "100,300 150,200 200,300 70,250 230,250"
+  svg.append('polygon')
+          .attr('points', star)
+          .style('fill', 'purple')
+
+
 </script>
 
 <html>
-  <p>Hello</p>
+  <body>
+  <p>Hello world</p>
+
+</body>
 </html>
