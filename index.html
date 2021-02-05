@@ -29,17 +29,10 @@
     .attr('width',WIDTH)
     .attr('height',HEIGHT)
 
-  // Add Lines
-  svg.append('line')
-          .attr('x1', 100)    // endpoints
-          .attr('y1', 150)
-          .attr('x2', 340)
-          .attr('y2', 150)
-          .attr('stroke', 'red');
-
   let buttons = d3.select("#buttons")
     .attr('width', 300)
     .attr('height', 80)
+
   // Add Circles
   buttons.append('circle')
     .attr('cx', 40)    // center of circle
@@ -161,7 +154,7 @@
             .attr('fill', '#002868');
 
     let dataStr = "105,567 177,448 199,703 211,362 217,656 " +
-            "235,723 237,395 239,523 269,328 275,700 " +
+            "235,723 237,395 239,523 269,328 833,300 " +
             "285,514 296,848 305,794 315,706 335,269 " +
             "339,876 372,703 377,504 380,132 417,48 " +
             "420,318 424,471 431,622 432,860 44,402 " +
@@ -187,10 +180,6 @@
 
     // alerts are handy, as are text on the screen (handier than the console?)
 
-    // svg.append('polygon')
-    //   .attr('points', arrToPoints(moveStarTo([...STAR], 50, 100)))
-    //   .style('fill', 'white')
-
     svg.selectAll('polygon')
             .data(data)
             .enter()
@@ -200,8 +189,66 @@
               parseInt(d[0]), parseInt(d[1])))
             })
             .style('fill', 'white')
+            .on('mouseover', function(e, d) {
+              setLabel(parseInt(d[0])+","+parseInt(d[1]))
+            })
 
-    // todo
+    let constellations =
+            [[[269,328,335,269],[335,269,420,318],
+              [269,328,377,504],[377,504,431,622],
+            [431,622,571,568], [571,568,475,432],
+            [420,318,475,432]],
+            [[380,132,612,190],[612,190,648,211],
+              [648,211,685,227],[685,227,679,187],
+              [679,187,640,144],[640,144,417,48],
+              [685,227,733,290],[733,290,697,362],
+              [697,362,728,412],[733,290,833,300]],
+            [[217,656,199,703],[199,703,235,723],
+              [235,723,315,706],[315,706,372,703],
+              [315,706,305,794],[305,794,296,848],
+              [296,848,339,876],[339,876,432,860]]]
+
+    for (i = 0; i < constellations.length; i++) {
+      let con = constellations[i]
+      for (j=0; j <con.length; j++) {
+        let segment = con[j]
+        for(k=0; k < segment.length-1; k+=2) {
+          segment[k] += 12
+          segment[k+1] += 5
+        }
+      }
+    }
+
+    function showConst(dataInput, color) {// Add Lines
+      svg.selectAll('line')
+              .data(dataInput)
+              .enter()
+              .append('line')
+              .attr('x1', function(d) {
+                return parseInt(d[0])
+              })
+              .attr('y1', function(d) {
+                return parseInt(d[1])
+              })
+              .attr('x2', function(d) {
+                return parseInt(d[2])
+              })
+              .attr('y2', function(d) {
+                return parseInt(d[3])
+              })
+              .attr('stroke', color);
+    }
+
+    showConst(constellations[0], '#F3F6B5')
+    showConst(constellations[1], '#F4B81D');
+    setLabel('showing taurus')
+    showConst(constellations[2],'#F4B81D');
+    setLabel('showing sirius')
+
+    // todo constellations
+    // todo animation
+    // todo make pretty and comment
+    // todo: draw own constellations?
   }
 
   function moveStarTo(arr, x, y) {
@@ -213,6 +260,5 @@
     }
     return arr
   }
-
 </script>
 
