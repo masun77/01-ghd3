@@ -1,109 +1,128 @@
 <!DOCTYPE html>
 
 <html>
-<body>
-<div id="'wrapper">
-  <svg id="workspace"></svg>
-</div>
-<p>Hello world</p>
-
-</body>
+  <body>
+    <p>Stars in Flag</p>
+    <button id="starBtn">Change</button>
+    <br>
+    <br>
+    <div id="wrapper">
+      <svg id="workspace"></svg>
+    </div>
+  </body>
 </html>
 
 <script src="https://d3js.org/d3.v6.min.js"></script>
 
 <script>
   console.log(d3); // test if d3 is loaded
-  console.log("Flag")
-
-  document.getElementById("workspace").style.backgroundColor="#ffffff";
 
   const WIDTH = 1500;
   const HEIGHT = 910;
-  const BLUE_WIDTH = 597
-  const BLUE_HEIGHT = 490
+  const STAR = [0,6, 24,6, 4.5,15, 12,0, 19.5,15]
+  let counter = 1;
 
+  document.getElementById("workspace").style.backgroundColor="#ffffff";
   let svg = d3.select('#workspace')
     .attr('width',WIDTH)
     .attr('height',HEIGHT)
 
-  // Add an SVG todo
+  let starBtn = document.getElementById("starBtn")
+  starBtn.onclick = function(){changeGraphic()};
 
-  // todo: change so centered on page or nice to zoom around etc
-  // Add rectangles
-  for (i=0; i < 7; i++) {    // stripes
-    svg.append('rect')
-      .attr('x', 0)  // top left corner
-      .attr('y', i*140)  // x,y coords from origin top left
-      .attr('width', WIDTH)
-      .attr('height', 70)
-      .attr('fill', '#BF0A30');
-  }
-  svg.append('rect')    // blue
-    .attr('x', 0)
-    .attr('y', 0)
-    .attr('width', BLUE_WIDTH)
-    .attr('height', BLUE_HEIGHT)
-    .attr('fill', '#002868');
-
-  // Add Polygons
-  let poly = "10,10 10,200 20,30 15,15"
-  svg.append('polygon')
-    .attr('points', poly)
-    .style('fill', 'lime')
-
-
-  // todo: you should do this with d3's data abilities rather than
-  // plotting them yourself
-  let starPts = [0,6, 24,6, 4.5,15, 12,0, 19.5,15]
-  for (i = 0; i < starPts.length; i++) {
-    starPts[i] *= 3;
-  }
-
-  function arrToPoints(arr) {
-    let arrStr = ''
-    arr.forEach(function(item, index, array) {
-      arrStr += item
-      if (index % 2 == 0) {
-        arrStr += ','
-      }
-      else {
-        arrStr += ' '
-      }
-    })
-    return arrStr;
-  }
-
-  function changeStarXOrYBy(arr, startIndex, endIndex, start, increment, factor) {
-    for (xpt = startIndex; xpt < endIndex; xpt += 2) {
-      arr[xpt] += start + increment * factor;
+  function changeGraphic() {
+    removeChildren(document.getElementById("workspace"))
+    if (counter %2 == 0) {
+      setFlag()
     }
-    return arr
+    else {
+      setSky()
+    }
+    counter++
   }
 
-  // 56 px height
-  // .o63 = 31
-  for (i =0; i < 5; i++) {
-    for (j = 0; j < 6; j++) {
-      currPts = [...starPts];
-      currPts = changeStarXOrYBy(currPts, 0, 9, 10, 100, j)
-      currPts = changeStarXOrYBy(currPts, 1, 10, 20, 100, i)
-      svg.append('polygon')
-        .attr('points', arrToPoints(currPts))
-        .style('fill', 'white')
+  function removeChildren(node) {
+    while (node.hasChildNodes()) {
+      node.removeChild(node.childNodes[0])
     }
-    if (i < 4) {
-      for (j = 0; j < 5; j++) {
-        currPts = [...starPts];
-        currPts = changeStarXOrYBy(currPts, 1, 10, 70, 100, i)
-        currPts = changeStarXOrYBy(currPts, 0, 9, 60, 100, j)
+  }
+
+  setFlag()
+
+  function setFlag() {
+    const BLUE_WIDTH = 597
+    const BLUE_HEIGHT = 490
+
+    // Add rectangles
+    for (i=0; i < 7; i++) {    // stripes
+      svg.append('rect')
+              .attr('x', 0)  // top left corner
+              .attr('y', i*140)  // x,y coords from origin top left
+              .attr('width', WIDTH)
+              .attr('height', 70)
+              .attr('fill', '#BF0A30');
+    }
+    svg.append('rect')    // blue
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', BLUE_WIDTH)
+            .attr('height', BLUE_HEIGHT)
+            .attr('fill', '#002868');
+
+    // todo: you should do this with d3's data abilities rather than
+    // plotting them yourself
+    for (i = 0; i < STAR.length; i++) {
+      STAR[i] *= 3;
+    }
+
+    function arrToPoints(arr) {
+      let arrStr = ''
+      arr.forEach(function(item, index, array) {
+        arrStr += item
+        if (index % 2 == 0) {
+          arrStr += ','
+        }
+        else {
+          arrStr += ' '
+        }
+      })
+      return arrStr;
+    }
+
+    function changeStarXOrYBy(arr, startIndex, endIndex, start, increment, factor) {
+      for (xpt = startIndex; xpt < endIndex; xpt += 2) {
+        arr[xpt] += start + increment * factor;
+      }
+      return arr
+    }
+
+    // 56 px height
+    // .o63 = 31
+    // Add polygons
+    for (i =0; i < 5; i++) {
+      for (j = 0; j < 6; j++) {
+        currPts = [...STAR];
+        currPts = changeStarXOrYBy(currPts, 0, 9, 10, 100, j)
+        currPts = changeStarXOrYBy(currPts, 1, 10, 20, 100, i)
         svg.append('polygon')
                 .attr('points', arrToPoints(currPts))
                 .style('fill', 'white')
       }
+      if (i < 4) {
+        for (j = 0; j < 5; j++) {
+          currPts = [...STAR];
+          currPts = changeStarXOrYBy(currPts, 1, 10, 70, 100, i)
+          currPts = changeStarXOrYBy(currPts, 0, 9, 60, 100, j)
+          svg.append('polygon')
+                  .attr('points', arrToPoints(currPts))
+                  .style('fill', 'white')
+        }
+      }
     }
   }
 
+  // Add some paths todo
+  // todo: change so centered on page or nice to zoom around etc
   // Add Circles
   svg.append('circle')
           .attr('cx', 100)    // center of circle
@@ -118,7 +137,78 @@
           .attr('x2', 340)
           .attr('y2', 150)
           .attr('stroke', 'red');
+</script>
 
+<script>
+  const STAR = [0,6, 24,6, 4.5,15, 12,0, 19.5,15]
+
+  function moveStarTo(arr, x, y) {
+    for (xpt = 0; xpt < 9; xpt += 2) {
+      arr[xpt] += x;
+      arr[xpt] = Math.round(arr[xpt])
+      arr[xpt+1] += y;
+      arr[xpt+1] = Math.round(arr[xpt+1])
+    }
+    return arr
+  }
+
+  function setSky() {
+    alert('sky!')
+  }
+
+  data = "105,567 " +
+          "177,448 " +
+          "199,703 " +
+          "211,362 " +
+          "217,656 " +
+          "235,723 " +
+          "237,395 " +
+          "239,523 " +
+          "269,328 " +
+          "275,700 " +
+          "285,514 " +
+          "296,848 " +
+          "305,794 " +
+          "315,706 " +
+          "335,269 " +
+          "339,876 " +
+          "372,703 " +
+          "377,504 " +
+          "380,132 " +
+          "417,48 " +
+          "420,318 " +
+          "424,471 " +
+          "431,622 " +
+          "432,860 " +
+          "44,402 " +
+          "475,432 " +
+          "489,696 " +
+          "501,224 " +
+          "515,782 " +
+          "533,704 " +
+          "541,244 " +
+          "549,802 " +
+          "556,378 " +
+          "568,291 " +
+          "571,334 " +
+          "571,568 " +
+          "581,580 " +
+          "593,514 " +
+          "601,708 " +
+          "612,190 " +
+          "621,759 " +
+          "640,144 " +
+          "648,211 " +
+          "67,360 " +
+          "679,187 " +
+          "684,758 " +
+          "685,227 " +
+          "697,362 " +
+          "728,412 " +
+          "733,290 " +
+          "837,298 " +
+          "865,366 " +
+          "865,378 "
 
 </script>
 

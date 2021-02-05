@@ -17,6 +17,7 @@
     const STAR = [0,6, 24,6, 4.5,15, 12,0, 19.5,15]
 
     let svg = d3.select('#workspace');
+    // WriteToFile()
 
     function arrToPoints(arr) {
         let arrStr = ''
@@ -48,8 +49,8 @@
         currPts = [...STAR]
         currPts = changeStarXOrYBy(currPts, 0, 9, x)
         currPts = changeStarXOrYBy(currPts, 1, 10, y)
-        // para.append(document.createElement("br"))
-        // para.appendChild(document.createTextNode(arrToPoints(currPts)))
+        para.append(document.createElement("br"))
+        para.appendChild(document.createTextNode(arrToPoints(currPts)))
         svg.append('polygon')
             .attr('points', arrToPoints(currPts))
             .style('fill', 'white');
