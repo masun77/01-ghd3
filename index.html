@@ -1,42 +1,50 @@
 <!DOCTYPE html>
 
-<script src="https://d3js.org/d3.v6.min.js"></script>
+<html>
+<body>
+<div id="'wrapper">
+  <svg id="workspace"></svg>
+</div>
+<p>Hello world</p>
 
-<svg id="workspace"></svg>
+</body>
+</html>
+
+<script src="https://d3js.org/d3.v6.min.js"></script>
 
 <script>
   console.log(d3); // test if d3 is loaded
-  console.log("hello")
+  console.log("Flag")
 
-  document.getElementById("workspace").style.backgroundColor="#2a2a35";
+  document.getElementById("workspace").style.backgroundColor="#ffffff";
+
+  const WIDTH = 1500;
+  const HEIGHT = 910;
+  const BLUE_WIDTH = 597
+  const BLUE_HEIGHT = 490
 
   var svg = d3.select('#workspace')
-    .attr('width',500)
-    .attr('height',500)
+    .attr('width',WIDTH)
+    .attr('height',HEIGHT)
 
   // Add an SVG todo
-  // Add Rectangles
-  svg.append('rect')
-          .attr('x', 340)  // top left corner
-          .attr('y', 150)  // x,y coords from origin top left
-          .attr('width', 30)
-          .attr('height', 10)
-          .attr('fill', '#fff4ea');
 
-  // Add Circles
-  svg.append('circle')
-    .attr('cx', 100)    // center of circle
-    .attr('cy', 150)
-    .attr('r', 30)
-    .attr('fill', '#fff4ea');
-
-  // Add Lines
-  svg.append('line')
-    .attr('x1', 100)    // endpoints
-    .attr('y1', 150)
-    .attr('x2', 340)
-    .attr('y2', 150)
-    .attr('stroke', 'red');
+  // todo: change so centered on page or nice to zoom around etc
+  // Add rectangles
+  for (i=0; i < 7; i++) {    // stripes
+    svg.append('rect')
+      .attr('x', 0)  // top left corner
+      .attr('y', i*140)  // x,y coords from origin top left
+      .attr('width', WIDTH)
+      .attr('height', 70)
+      .attr('fill', '#BF0A30');
+  }
+  svg.append('rect')    // blue
+    .attr('x', 0)
+    .attr('y', 0)
+    .attr('width', BLUE_WIDTH)
+    .attr('height', BLUE_HEIGHT)
+    .attr('fill', '#002868');
 
   // Add Polygons
   var poly = "10,10 10,200 20,30 15,15"
@@ -44,17 +52,74 @@
     .attr('points', poly)
     .style('fill', 'lime')
 
-  var star = "100,300 150,200 200,300 70,250 230,250"
-  svg.append('polygon')
-          .attr('points', star)
-          .style('fill', 'purple')
+
+  // todo: you should do this with d3's data abilities rather than
+  // plotting them yourself
+  var starPts = [0,6, 24,6, 4.5,15, 12,0, 19.5,15]
+  for (i = 0; i < starPts.length; i++) {
+    starPts[i] *= 3;
+  }
+
+  function arrToPoints(arr) {
+    var arrStr = ''
+    arr.forEach(function(item, index, array) {
+      arrStr += item
+      if (index % 2 == 0) {
+        arrStr += ','
+      }
+      else {
+        arrStr += ' '
+      }
+    })
+    return arrStr;
+  }
+
+  // 56 px height
+  // .o63 = 31
+  for (i =0; i < 5; i++) {
+    for (j = 0; j < 6; j++) {
+      currPts = [...starPts];
+      for (ypt = 1; ypt < 10; ypt+=2) {
+        currPts[ypt] += 20 + 100 * i;
+      }
+      for (xpt = 0; xpt < 9; xpt += 2) {
+        currPts[xpt] += 10 + 100 * j;
+      }
+      svg.append('polygon')
+        .attr('points', arrToPoints(currPts))
+        .style('fill', 'white')
+    }
+    if (i < 4) {
+      for (j = 0; j < 5; j++) {
+        currPts = [...starPts];
+        for (ypt = 1; ypt < 10; ypt += 2) {
+          currPts[ypt] += 70 + 100 * i;
+        }
+        for (xpt = 0; xpt < 9; xpt += 2) {
+          currPts[xpt] += 60 + 100 * j;
+        }
+        svg.append('polygon')
+                .attr('points', arrToPoints(currPts))
+                .style('fill', 'white')
+      }
+    }
+  }
+
+  // Add Circles
+  svg.append('circle')
+          .attr('cx', 100)    // center of circle
+          .attr('cy', 150)
+          .attr('r', 30)
+          .attr('fill', '#fff4ea');
+
+  // Add Lines
+  svg.append('line')
+          .attr('x1', 100)    // endpoints
+          .attr('y1', 150)
+          .attr('x2', 340)
+          .attr('y2', 150)
+          .attr('stroke', 'red');
 
 
 </script>
 
-<html>
-  <body>
-  <p>Hello world</p>
-
-</body>
-</html>
