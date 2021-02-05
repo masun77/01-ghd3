@@ -23,7 +23,7 @@
   const BLUE_WIDTH = 597
   const BLUE_HEIGHT = 490
 
-  var svg = d3.select('#workspace')
+  let svg = d3.select('#workspace')
     .attr('width',WIDTH)
     .attr('height',HEIGHT)
 
@@ -47,7 +47,7 @@
     .attr('fill', '#002868');
 
   // Add Polygons
-  var poly = "10,10 10,200 20,30 15,15"
+  let poly = "10,10 10,200 20,30 15,15"
   svg.append('polygon')
     .attr('points', poly)
     .style('fill', 'lime')
@@ -55,13 +55,13 @@
 
   // todo: you should do this with d3's data abilities rather than
   // plotting them yourself
-  var starPts = [0,6, 24,6, 4.5,15, 12,0, 19.5,15]
+  let starPts = [0,6, 24,6, 4.5,15, 12,0, 19.5,15]
   for (i = 0; i < starPts.length; i++) {
     starPts[i] *= 3;
   }
 
   function arrToPoints(arr) {
-    var arrStr = ''
+    let arrStr = ''
     arr.forEach(function(item, index, array) {
       arrStr += item
       if (index % 2 == 0) {
@@ -74,17 +74,20 @@
     return arrStr;
   }
 
+  function changeStarXOrYBy(arr, startIndex, endIndex, start, increment, factor) {
+    for (xpt = startIndex; xpt < endIndex; xpt += 2) {
+      arr[xpt] += start + increment * factor;
+    }
+    return arr
+  }
+
   // 56 px height
   // .o63 = 31
   for (i =0; i < 5; i++) {
     for (j = 0; j < 6; j++) {
       currPts = [...starPts];
-      for (ypt = 1; ypt < 10; ypt+=2) {
-        currPts[ypt] += 20 + 100 * i;
-      }
-      for (xpt = 0; xpt < 9; xpt += 2) {
-        currPts[xpt] += 10 + 100 * j;
-      }
+      currPts = changeStarXOrYBy(currPts, 0, 9, 10, 100, j)
+      currPts = changeStarXOrYBy(currPts, 1, 10, 20, 100, i)
       svg.append('polygon')
         .attr('points', arrToPoints(currPts))
         .style('fill', 'white')
@@ -92,12 +95,8 @@
     if (i < 4) {
       for (j = 0; j < 5; j++) {
         currPts = [...starPts];
-        for (ypt = 1; ypt < 10; ypt += 2) {
-          currPts[ypt] += 70 + 100 * i;
-        }
-        for (xpt = 0; xpt < 9; xpt += 2) {
-          currPts[xpt] += 60 + 100 * j;
-        }
+        currPts = changeStarXOrYBy(currPts, 1, 10, 70, 100, i)
+        currPts = changeStarXOrYBy(currPts, 0, 9, 60, 100, j)
         svg.append('polygon')
                 .attr('points', arrToPoints(currPts))
                 .style('fill', 'white')
