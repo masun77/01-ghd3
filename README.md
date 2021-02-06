@@ -1,6 +1,6 @@
 # Assignment 1 - Stars: GitHub and d3  
 
-Website: [masun77.github.io/01-ghd3/](masun77.github.io/01-ghd3/)
+Website: [masun77.github.io/01-ghd3/](https://masun77.github.io/01-ghd3/)
 
 ### Description
 
