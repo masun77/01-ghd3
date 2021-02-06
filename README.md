@@ -1,6 +1,6 @@
 # Assignment 1 - Stars: GitHub and d3  
 
-Website: [masun77.github.io/01-ghd3](masun77.github.io/01-ghd3)
+Website: [masun77.github.io/01-ghd3/](https://masun77.github.io/01-ghd3/)
 
 ### Description
 
@@ -8,6 +8,7 @@ This webpage runs on Github Pages. It uses HTML, JavaScript, and the d3 library 
 
 The website can show two graphics. One is the American flag, one is part of the night sky 
 that's visible in the northern hemisphere in February. Screenshots are shown below:
+
 ![img.png](img.png)
 ![img_1.png](img_1.png)
 
