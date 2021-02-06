@@ -128,13 +128,21 @@
 
   function setLabel(text) {
     let label = document.getElementById("label")
-    label.removeChild(label.firstChild)
+    removeChildren(label)
     label.appendChild(document.createTextNode(text))
   }
 
   function addToLabel(text) {
     let label = document.getElementById("label")
     label.appendChild(document.createElement("br"))
+    label.appendChild(document.createTextNode(text))
+  }
+
+  function replaceInLabel(text) {
+    let label = document.getElementById("label")
+    if (label.childNodes.length > 1) {
+      label.removeChild(label.lastChild)
+    }
     label.appendChild(document.createTextNode(text))
   }
 
@@ -219,9 +227,14 @@
       }
     }
 
-    function showConst(dataInput, color) {// Add Lines
+    function name(d) {
+      return d[0] + d[1]
+    }
+
+    // Add Lines
+    function showConst(dataInput, color, constName) {
       svg.selectAll('line')
-              .data(dataInput)
+              .data(dataInput, name)
               .enter()
               .append('line')
               .attr('x1', function(d) {
@@ -236,14 +249,15 @@
               .attr('y2', function(d) {
                 return parseInt(d[3])
               })
-              .attr('stroke', color);
+              .attr('stroke', color)
+              .on('mouseenter', function() {
+                replaceInLabel(constName)
+              });
     }
 
-    showConst(constellations[0], '#F3F6B5')
-    showConst(constellations[1], '#F4B81D');
-    setLabel('showing taurus')
-    showConst(constellations[2],'#F4B81D');
-    setLabel('showing sirius')
+    showConst(constellations[0], '#F3F6B5', ' - Orion')
+    showConst(constellations[1], '#F4B81D', ' - Taurus');
+    showConst(constellations[2],'#F4B81D', ' - Canis Major');
 
     // todo constellations
     // todo animation
